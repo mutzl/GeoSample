@@ -1,0 +1,76 @@
+﻿<Page x:Class="GeoSample.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:GeoSample"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+      mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <maps:MapControl x:Name="map"
+                         Style="{x:Bind ViewModel.MapStyle, Mode=OneWay}"
+                         MapServiceToken="{x:Bind ViewModel.Token}"
+                         Center="{x:Bind ViewModel.Center, Mode=OneWay}"
+                         DesiredPitch="{x:Bind ViewModel.Pitch, Mode=OneWay}"
+                         Heading="{x:Bind ViewModel.Orientation, Mode=OneWay}"
+                         ZoomLevel="{x:Bind ViewModel.Zoomlevel, Mode=TwoWay}"
+                         Margin="0,116,0,0">
+            <maps:MapItemsControl ItemsSource="{x:Bind ViewModel.PointsOfInterest}">
+                <maps:MapItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="local:PointOfInterest">
+                        <Grid maps:MapControl.Location="{x:Bind Geopoint}"
+                              maps:MapControl.NormalizedAnchorPoint="0.5 1">
+                            <Image Source="Assets/pin.png" />
+                            <TextBlock Text="{x:Bind Description}" />
+                        </Grid>
+                    </DataTemplate>
+                </maps:MapItemsControl.ItemTemplate>
+            </maps:MapItemsControl>
+
+        </maps:MapControl>
+
+
+        <Button Content="Get Current Location"
+                HorizontalAlignment="Left"
+                Margin="10,10,0,0"
+                Click="{x:Bind ViewModel.GetCurrentLocation}"
+                VerticalAlignment="Top" />
+
+        <ComboBox Width="184"
+                  Height="52"
+                  Margin="176,1,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  SelectedValue="{x:Bind ViewModel.MapStyleName, Mode=TwoWay}">
+            <x:String>None</x:String>
+            <x:String>Aerial</x:String>
+            <x:String>Aerial3D</x:String>
+            <x:String>Aerial3DWithRoads</x:String>
+            <x:String>AerialWithRoads</x:String>
+            <x:String>Road</x:String>
+            <x:String>Terrain</x:String>
+        </ComboBox>
+        <Slider x:Name="slider"
+                Minimum="1"
+                Maximum="20"
+                Value="{x:Bind ViewModel.Zoomlevel, Mode=TwoWay}"
+                HorizontalAlignment="Left"
+                Margin="10,78,0,0"
+                VerticalAlignment="Top"
+                Width="340" />
+
+        <Slider  Orientation="Vertical"
+                 Minimum="0"
+                 Maximum="75"
+                 Value="{x:Bind ViewModel.Pitch, Mode=TwoWay}"
+                 Width="34"
+                 Margin="0,179,10,0"
+                 HorizontalAlignment="Right" />
+        <Slider  Orientation="Horizontal"
+                 Minimum="0"
+                 Maximum="360"
+                 Value="{x:Bind ViewModel.Orientation, Mode=TwoWay}"
+                 Margin="10,179,10,417" />
+    </Grid>
+</Page>
